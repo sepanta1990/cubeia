@@ -45,5 +45,20 @@ public class TranslationServiceTest {
 
     }
 
+    @Test
+    public void updateTranslationTest() {
+        Translation translationToBeUpdated = new Translation(1, "buy-chips", "buy chips", null);
+        Translation translationUpdated = new Translation(1, "dont-buy-chips", "dont buy chips", null);
+
+
+        when(translationRepository.save(translationToBeUpdated)).thenReturn(translationUpdated);
+        when(translationRepository.findOne(1)).thenReturn(translationToBeUpdated);
+
+        assertEquals(Optional.of(translationUpdated), translationService.updateTranslation(1, new com.cubeia.exercise.exercise.dto.Translation(1, "dont-buy-chips", "dont buy chips")));
+
+        when(translationRepository.findOne(1)).thenReturn(null);
+        assertEquals(Optional.empty(), translationService.updateTranslation(1, new com.cubeia.exercise.exercise.dto.Translation(1, "dont-buy-chips", "dont buy chips")));
+
+    }
 
 }
