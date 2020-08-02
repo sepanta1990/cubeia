@@ -70,5 +70,15 @@ public class TranslationServiceTest {
         assertTrue(translationService.deleteTranslationById(1));
     }
 
+    @Test
+    public void getTranslationByKeyAndLanguageCodeTest() {
+        Translation translation = new Translation(1, "buy-chips", "en", null);
+
+        when(translationRepository.findByKeyAndLanguageCode("buy-chips", "en")).thenReturn(translation);
+        assertEquals(Optional.of(translation), translationService.getTranslationByKeyAndLanguageCode("buy-chips", "en"));
+
+        when(translationRepository.findByKeyAndLanguageCode("buy-chips", "en")).thenReturn(null);
+        assertEquals(Optional.empty(), translationService.getTranslationByKeyAndLanguageCode("buy-chips", "en"));
+    }
 
 }
