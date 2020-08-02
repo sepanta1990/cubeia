@@ -39,5 +39,12 @@ public class TranslationService {
         return translationRepository.save(newTranslation);
     }
 
+    public Optional<Translation> updateTranslation(Integer id, com.cubeia.exercise.exercise.dto.Translation translation) {
+        return Optional.ofNullable(translationRepository.findOne(id)).map(translationEnt -> {
+            translationEnt.setKey(translation.getKey());
+            translationEnt.setMeaning(translation.getMeaning());
+            return translationRepository.save(translationEnt);
+        });
+    }
 
 }
