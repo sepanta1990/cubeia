@@ -137,6 +137,28 @@ public class TranslationControllerTest {
         verify(translationService, times(1)).updateTranslation(id, requestDto);
     }
 
+    @Test
+    public void removeTranslationReturnOK() throws Exception {
+
+        Integer id = 1;
+
+        when(translationService.deleteTranslationById(id)).thenReturn(true);
+        this.mockMvc.perform(delete("/translations/" + id)).andExpect(status().isNoContent()).andReturn();
+
+        verify(translationService, times(1)).deleteTranslationById(id);
+    }
+
+    @Test
+    public void removeTranslationReturnNotfound() throws Exception {
+
+        Integer id = 1;
+
+        when(translationService.deleteTranslationById(id)).thenReturn(false);
+        this.mockMvc.perform(delete("/translations/" + id)).andExpect(status().isNotFound()).andReturn();
+
+        verify(translationService, times(1)).deleteTranslationById(id);
+    }
+
     public static <T> T parseResponse(MvcResult result, Class<T> responseClass) {
         try {
             String contentAsString = result.getResponse().getContentAsString();
