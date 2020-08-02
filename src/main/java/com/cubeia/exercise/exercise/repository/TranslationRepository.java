@@ -11,4 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TranslationRepository extends JpaRepository<Translation, Integer> {
 
+    @Query(value = "SELECT t FROM Translation t INNER JOIN t.languages l WHERE l.code= ?2 AND t.key=?1")
+    Translation findByKeyAndLanguageCode(String key, String languageCode);
+
 }

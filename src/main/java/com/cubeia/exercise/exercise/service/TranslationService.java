@@ -55,4 +55,8 @@ public class TranslationService {
         return true;
     }
 
+    public Optional<Translation> getTranslationByKeyAndLanguageCode(String key, String languageCode) {
+        return Optional.ofNullable(translationRepository.findByKeyAndLanguageCode(key, languageCode));
+    }
+
 }
