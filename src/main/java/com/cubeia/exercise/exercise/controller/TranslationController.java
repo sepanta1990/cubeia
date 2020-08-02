@@ -60,4 +60,15 @@ public class TranslationController {
                 .orElseThrow(() -> new RecordNotFoundException("Translation not found with id: " + id));
     }
 
+    @ApiOperation(value = "Delete a translation")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Successfully deleted the translation"),
+            @ApiResponse(code = 404, message = "You have entered an invalid translation id")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeTranslation(@PathVariable("id") Integer id) {
+        if (!translationService.deleteTranslationById(id))
+            throw new RecordNotFoundException("Translation not found with id: " + id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
