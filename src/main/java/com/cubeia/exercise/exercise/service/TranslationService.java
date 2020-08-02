@@ -47,4 +47,12 @@ public class TranslationService {
         });
     }
 
+    public boolean deleteTranslationById(Integer id) {
+        if (!translationRepository.exists(id)) {
+            return false;
+        }
+        translationRepository.delete(id);
+        return true;
+    }
+
 }
