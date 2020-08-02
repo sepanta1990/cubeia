@@ -49,4 +49,15 @@ public class TranslationController {
 
     }
 
+    @ApiOperation(value = "Update a particular translation by id", response = Translation.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully updated the translation object"),
+            @ApiResponse(code = 404, message = "You have entered an invalid translation id")
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<Translation> updateTranslation(@PathVariable("id") Integer id, @RequestBody Translation translation) {
+        return translationService.updateTranslation(id, translation).map(tr -> ResponseEntity.ok(translationMapper.toTranslationDto(tr)))
+                .orElseThrow(() -> new RecordNotFoundException("Translation not found with id: " + id));
+    }
+
 }
