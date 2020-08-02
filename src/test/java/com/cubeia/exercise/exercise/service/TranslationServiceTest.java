@@ -61,4 +61,14 @@ public class TranslationServiceTest {
 
     }
 
+    @Test
+    public void deleteTranslationByIdTest() {
+        when(translationRepository.exists(1)).thenReturn(false);
+        assertFalse(translationService.deleteTranslationById(1));
+
+        when(translationRepository.exists(1)).thenReturn(true);
+        assertTrue(translationService.deleteTranslationById(1));
+    }
+
+
 }
