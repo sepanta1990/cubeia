@@ -79,6 +79,35 @@ public class TranslationControllerTest {
 
     }
 
+    @Test
+    public void addTranslationReturnOK() throws Exception {
+
+        com.cubeia.exercise.exercise.dto.Translation requestDto = new com.cubeia.exercise.exercise.dto.Translation(null, "buy-chips", "buy chips");
+        String languageCode = "en";
+
+        when(translationService.addTranslation(requestDto, languageCode)).thenReturn(new Translation(1, "buy-chips", "buy chips", null));
+        MvcResult requestResult = this.mockMvc.perform(post("/translations/" + languageCode).contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(requestDto))).andExpect(status().isOk()).andReturn();
+
+        com.cubeia.exercise.exercise.dto.Translation responseDto = parseResponse(requestResult, com.cubeia.exercise.exercise.dto.Translation.class);
+        assertEquals(responseDto.getKey(), requestDto.getKey());
+        assertEquals(responseDto.getMeaning(), requestDto.getMeaning());
+        assertEquals(responseDto.getId(), new Integer(1));
+    }
+
+    @Test
+    public void addTranslationReturnConflict() throws Exception {
+
+        com.cubeia.exercise.exercise.dto.Translation requestDto = new com.cubeia.exercise.exercise.dto.Translation(null, "buy-chips", "buy chips");
+        String languageCode = "en";
+
+        when(translationService.addTranslation(requestDto, languageCode)).thenReturn(null);
+        this.mockMvc.perform(post("/translations/" + languageCode).contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(requestDto))).andExpect(status().isConflict()).andReturn();
+
+        verify(translationService, times(1)).addTranslation(requestDto, languageCode);
+    }
+
     public static <T> T parseResponse(MvcResult result, Class<T> responseClass) {
         try {
             String contentAsString = result.getResponse().getContentAsString();
