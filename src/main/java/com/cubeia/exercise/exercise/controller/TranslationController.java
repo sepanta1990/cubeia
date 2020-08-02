@@ -31,7 +31,7 @@ public class TranslationController {
 
     @ApiOperation(value = "Search translation for a specific key", response = Translation.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved the tournament object"),
+            @ApiResponse(code = 200, message = "Successfully retrieved the translation"),
             @ApiResponse(code = 404, message = "No translation found for the key and language code")
     })
     @GetMapping("/search")
