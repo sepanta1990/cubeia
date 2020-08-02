@@ -1,15 +1,14 @@
 package com.cubeia.exercise.exercise.controller;
 
+import com.cubeia.exercise.exercise.dto.Translation;
 import com.cubeia.exercise.exercise.exception.exception.RecordAlreadyExistsException;
+import com.cubeia.exercise.exercise.exception.exception.RecordNotFoundException;
 import com.cubeia.exercise.exercise.service.TranslationService;
 import com.cubeia.exercise.exercise.util.mapper.TranslationMapper;
-import com.cubeia.exercise.exercise.dto.Translation;
-import com.cubeia.exercise.exercise.exception.exception.RecordNotFoundException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,5 +40,13 @@ public class TranslationController {
                 .orElseThrow(() -> new RecordNotFoundException("Key not found with language code: " + languageCode));
     }
 
+    @ApiOperation(value = "Create a new translation", response = Translation.class)
+    @PostMapping("/{languageCode}")
+    public ResponseEntity<Translation> addTranslation(@PathVariable("languageCode") String languageCode, @RequestBody Translation translation) {
+        return Optional.ofNullable(translationService.addTranslation(translation, languageCode)).
+                map(tr -> ResponseEntity.ok(translationMapper.toTranslationDto(tr)))
+                .orElseThrow(() -> new RecordAlreadyExistsException("Translation already exists with key: " + translation.getKey()));
+
+    }
 
 }
